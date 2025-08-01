@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.4.1] - 2025-08-01
+### Changed:
+- SWLS resonant converter implementation DC-link voltage feedforward controller
+- Including new variables FREQ_MODULATED_FF
+
 ## [2.4.0] - 2024-12-11
 ### Changed:
 - SWLS resonant converter PS module specification for SIRIUS 
