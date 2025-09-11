@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.3.3] - 2025-09-11
+### Changed:
+- Fixed ethernet communication sending ID in messages
+
 ## [2.3.2] - 2024-02-15
 ### Changed:
 - SWLS resonant converter updated PT100 sensor nomenclature 

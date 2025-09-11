@@ -1795,7 +1795,7 @@ class BaseDRS:
         return {**vars_dict, **self._parse_vars(vals[8:], template)}
 
     def read_vars_fbp(self) -> dict:
-        """Reads FBP 2S ACDC power supply variables
+        """Reads FBP power supply variables
 
         Returns
         -------

@@ -89,24 +89,24 @@ class EthDRS(BaseDRS):
     def _format_message(self, msg: bytes, msg_type: bytes) -> bytes:
         if (msg_type == ETH_CMD_WRITE):
             if (msg[4] == common.functions.index("reset_udc")): # Do not wait for a reply
-                msg = msg_type + struct.Struct(">f").pack(0.0) + msg
+                msg = msg_type + b'\x00' + struct.Struct(">f").pack(0.0) + msg
             else:
-                msg = msg_type + struct.Struct(">f").pack(self._serial_timeout) + msg
+                msg = msg_type + b'\x00' + struct.Struct(">f").pack(self._serial_timeout) + msg
         else:
-            msg = msg_type + struct.Struct(">f").pack(self._serial_timeout) + msg
+            msg = msg_type + b'\x00' + struct.Struct(">f").pack(self._serial_timeout) + msg
 
-        return msg[0:1] + struct.pack(">I", (len(msg) - 1)) + msg[1:]
+        return msg[0:2] + struct.pack(">I", (len(msg) - 2)) + msg[2:]
 
     def reset_input_buffer(self):
         self.socket.sendall(ETH_RESET_CMD)
-        self.socket.recv(16)
+        #self.socket.recv(16)
 
     @staticmethod
     def _parse_reply_size(reply: bytes) -> int:
-        return struct.unpack(">I", reply[1:])[0]
+        return struct.unpack(">I", reply[2:])[0]
 
     def _get_reply(self, _: int = None) -> bytes:
-        data_size = self._parse_reply_size(self.socket.recv(5))
+        data_size = self._parse_reply_size(self.socket.recv(6))
         payload = b""
 
         for _ in range(int(data_size / 4096)):
