@@ -105,6 +105,7 @@ functions = [
     "save_dsp_modules_eeprom",
     "load_dsp_modules_eeprom",
     "reset_udc",
+    "cfg_trig_delay_scope",
 ]
 
 op_modes = [

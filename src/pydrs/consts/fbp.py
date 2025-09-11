@@ -65,6 +65,18 @@ bsmp = {
     "ps_alarms_2": {"addr": 71, "format": "I", "size": 4, "egu": ""},
     "ps_alarms_3": {"addr": 72, "format": "I", "size": 4, "egu": ""},
     "ps_alarms_4": {"addr": 73, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_start_1": {"addr": 74, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_start_2": {"addr": 75, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_start_3": {"addr": 76, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_start_4": {"addr": 77, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_end_1": {"addr": 78, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_end_2": {"addr": 79, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_end_3": {"addr": 80, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_end_4": {"addr": 81, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_idx_1": {"addr": 82, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_idx_2": {"addr": 83, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_idx_3": {"addr": 84, "format": "I", "size": 4, "egu": ""},
+    "p_scope_buffer_idx_4": {"addr": 85, "format": "I", "size": 4, "egu": ""},
 }
 
 bsmp_dclink = {

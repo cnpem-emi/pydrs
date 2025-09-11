@@ -933,6 +933,17 @@ class BaseDRS:
         )
         return self._transfer(send_packet, 6)
 
+    def cfg_trig_delay_scope(self, delay: float) -> bytes:
+        payload_size = size_to_hex(1 + 4)  # Payload: ID + delay
+        hex_op_mode = float_to_hex(delay)
+        send_packet = (
+            COM_FUNCTION
+            + payload_size
+            + index_to_hex(common.functions.index("cfg_trig_delay_scope"))
+            + hex_op_mode
+        )
+        return self._transfer(send_packet, 6)
+
     def enable_scope(self) -> bytes:
         """Enables scope
 
