@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.4.2] - 2025-09-11
+### Changed:
+- Fixed Ethernet communication sending ID in messages
+
 ## [2.4.1] - 2025-08-01
 ### Changed:
 - SWLS resonant converter implementation DC-link voltage feedforward controller
