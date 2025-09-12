@@ -3,6 +3,7 @@
 ## [2.3.3] - 2025-09-11
 ### Changed:
 - Fixed ethernet communication sending ID in messages
+- Python 3.12.10 installation requirements
 
 ## [2.3.2] - 2024-02-15
 ### Changed:
