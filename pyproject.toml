@@ -7,7 +7,7 @@ exclude = '''
 '''
 
 [build-system]
-requires = ["setuptools>=40.8.0"]
+requires = ["setuptools>=80.7.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -21,7 +21,7 @@ classifiers=[
 description=""
 readme="README.md"
 license = {text = "MIT License"}
-requires-python=">=3.6"
+requires-python=">=3.12.10"
 dynamic=["version"]
 
 [tool.setuptools]
@@ -36,15 +36,15 @@ where = ["src"]
 
 [project.optional-dependencies]
 dev = [
-    "bandit==1.7.4",
-    "black==22.8.0",
-    "flake8==5.0.4",
+    "bandit==1.8.6",
+    "black==25.1.0",
+    "flake8==7.3.0",
     "flake8-bandit==4.1.1",
-    "flake8-bugbear==22.8.23",
-    "flake8-implicit-str-concat==0.3.0",
-    "mypy==0.971",
-    "mypy-extensions==0.4.3",
-    "pyflakes==2.5.0",
+    "flake8-bugbear==24.12.12",
+    "flake8-implicit-str-concat==0.5.0",
+    "mypy==1.18.1",
+    "mypy-extensions==1.1.0",
+    "pyflakes==3.4.0",
     "types-setuptools",
-    "pytest==7.1.2"
+    "pytest==8.3.5"
 ]
