@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.4.4] - 2026-09-21
+### Changed:
+- SWLS resonant converter including new enumerated, QDS Interlock
+
 ## [2.4.3] - 2026-02-13
 ### Changed:
 - SWLS resonant converter updated PT100 sensor nomenclature 

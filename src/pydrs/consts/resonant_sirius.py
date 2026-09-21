@@ -17,6 +17,7 @@ list_hard_interlocks = [
     "Opened Contactor K2 Fault",
     "External Interlock",
     "IIB Interlock",
+    "QDS Interlock",
 ]
 
 list_iib_interlocks = [
