@@ -836,7 +836,13 @@ class BaseDRS:
             + index_to_hex(common.functions.index("save_dsp_modules_eeprom"))
             + hex_type
         )
-        return self._transfer(send_packet, 6)
+
+        # User defined timeout is temporarily changed to a "safe" value to prevent lockups
+        old_timeout = self.timeout
+        self.timeout = 10
+        ret = self._transfer(send_packet, 6)
+        self.timeout = old_timeout
+        return ret
 
     def load_dsp_modules_eeprom(self, type_memory: int = 2) -> bytes:
         """Loads DSP modules from EEPROM to memory"""
@@ -1685,6 +1691,7 @@ class BaseDRS:
                 (vars_dict["status"]["model"] == "FAC_ACDC")
                 or (vars_dict["status"]["model"] == "FAC_2S_ACDC")
                 or (vars_dict["status"]["model"] == "FAC_2P4S_ACDC")
+                or (vars_dict["status"]["model"] == "FAC_2P_ACDC_IMAS")
             ):
                 vars_dict["ps_setpoint"] = vars_dict["ps_setpoint"][:-1] + "V"
                 vars_dict["ps_reference"] = vars_dict["ps_reference"][:-1] + "V"
@@ -2167,7 +2174,7 @@ class BaseDRS:
 
         return vars_dict
 
-    def read_vars_fac_2p_acdc_imas(self) -> dict:
+    def read_vars_fac_2p_acdc_imas(self, iib: bool = True) -> dict:
         """
         Read FAC 2P ACDC IMAS specific power supply variables
 
@@ -2176,27 +2183,82 @@ class BaseDRS:
         dict
             Dict containing FAC 2P ACDC IMAS variables
         """
-        return self._read_vars_generic(
+        vars_dict = self._read_vars_generic(
             fac.bsmp_2p_acdc_imas,
             fac.list_2p_acdc_imas_soft_interlocks,
             fac.list_2p_acdc_imas_hard_interlocks,
+            399,
         )
 
-    def read_vars_fac_2p_dcdc_imas(self, com_add=1) -> dict:
+        if iib:
+            vars_dict["iib_cmd_alarms_raw"] = vars_dict.pop("iib_alarms_cmd")
+            vars_dict["iib_cmd_interlocks_raw"] = vars_dict.pop("iib_interlocks_cmd")
+            vars_dict["iib_is_alarms_raw"] = vars_dict.pop("iib_alarms_is")
+            vars_dict["iib_is_interlocks_raw"] = vars_dict.pop("iib_interlocks_is")
+
+
+            vars_dict["iib_is_interlocks"] = self.decode_interlocks(
+                vars_dict["iib_is_interlocks_raw"],
+                fac.list_2p_acdc_imas_iib_is_interlocks,
+            )
+
+            vars_dict["iib_is_alarms"] = self.decode_interlocks(
+                vars_dict["iib_is_alarms_raw"],
+                fac.list_2p_acdc_imas_iib_is_alarms,
+            )
+
+            vars_dict["iib_cmd_interlocks"] = self.decode_interlocks(
+                vars_dict["iib_cmd_interlocks_raw"],
+                fac.list_2p_acdc_imas_iib_cmd_interlocks,
+            )
+
+            vars_dict["iib_cmd_alarms"] = self.decode_interlocks(
+                vars_dict["iib_cmd_alarms_raw"],
+                fac.list_2p_acdc_imas_iib_cmd_alarms,
+            )
+        return vars_dict
+
+    def read_vars_fac_2p_dcdc_imas(self, iib: bool = True) -> dict:
         """
         Read FAC 2P DCDC IMAS specific power supply variables
-
 
         Returns
         -------
         dict
             Dict containing FAC 2P DCDC IMAS variables
         """
-        return self._read_vars_generic(
+        vars_dict = self._read_vars_generic(
             fac.bsmp_2p_dcdc_imas,
             fac.list_2p_dcdc_imas_soft_interlocks,
             fac.list_2p_dcdc_imas_hard_interlocks,
         )
+
+        vars_dict["wfmref_index"] = round(
+            (
+                float(vars_dict["p_wfmref_end_0"])
+                - float(vars_dict["wfmref_offset"].split(" ")[0])
+            )
+            / 2
+            + 1,
+            3,
+        )
+
+        if iib:
+            for i in range(1, 2):
+                vars_dict[f"iib_interlocks_{i}_raw"] = vars_dict[f"iib_interlocks_{i}"]
+                vars_dict[f"iib_alarms_{i}_raw"] = vars_dict[f"iib_alarms_{i}"]
+
+                vars_dict[f"iib_interlocks_{i}"] = self.decode_interlocks(
+                    vars_dict[f"iib_interlocks_{i}_raw"],
+                    fac.list_2p_dcdc_imas_iib_interlocks,
+                )
+
+                vars_dict[f"iib_alarms_{i}"] = self.decode_interlocks(
+                    vars_dict[f"iib_alarms_{i}_raw"],
+                    fac.list_2p_dcdc_imas_iib_alarms,
+                )
+
+        return vars_dict
 
     def read_vars_swls_resonant_converter(self, iib=True) -> dict:
         """

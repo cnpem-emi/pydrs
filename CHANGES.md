@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.3.4] - 2026-09-28
+### Changed:
+- Power supply 1100A with BSMP specification, including new variables, alarms and interlocks
+
 ## [2.3.3] - 2025-09-11
 ### Changed:
 - Fixed ethernet communication sending ID in messages

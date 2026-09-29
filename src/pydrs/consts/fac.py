@@ -49,8 +49,8 @@ list_acdc_iib_cmd_interlocks = [
     "Rectifier Heat-Sink Overtemperature",
     "AC Mains Overcurrent",
     "Emergency Button",
-    "AC Mains Undervoltage",
     "AC Mains Overvoltage",
+    "AC Mains Undervoltage",
     "Ground Leakage Overcurrent",
     "Board IIB Overtemperature",
     "Module Overhumidity",
@@ -282,15 +282,29 @@ list_2p_acdc_imas_soft_interlocks = []
 
 list_2p_acdc_imas_hard_interlocks = [
     "CapBank Overvoltage",
+    "Rectifier Overvoltage",
+    "Rectifier Undervoltage",
     "Rectifier Overcurrent",
-    "AC Mains Contactor Fault",
-    "Module A Interlock",
-    "Module B Interlock",
-    "DCDC Interlock",
+    "Welded Contactor Fault",
+    "Opened Contactor Fault",
+    "IIB Input Stage Interlock",
+    "IIB Command Interlock",
+    "External Interlock",
 ]
 
+list_2p_acdc_imas_iib_is_interlocks = list_acdc_iib_is_interlocks
+list_2p_acdc_imas_iib_cmd_interlocks = list_acdc_iib_cmd_interlocks
+list_2p_acdc_imas_iib_is_alarms = list_acdc_iib_is_alarms
+list_2p_acdc_imas_iib_cmd_alarms = list_acdc_iib_cmd_alarms
+
 # FAC-2P DCDC
-list_2p_dcdc_imas_soft_interlocks = []
+list_2p_dcdc_imas_soft_interlocks = [
+    "DCCT Fault",
+    "Load Feedback Fault",
+    "Arm 1 Overcurrent",
+    "Arm 2 Overcurrent",
+    "Arms High Difference",
+]
 
 list_2p_dcdc_imas_hard_interlocks = [
     "Load Overcurrent",
@@ -298,11 +312,19 @@ list_2p_dcdc_imas_hard_interlocks = [
     "Module 2 CapBank_Overvoltage",
     "Module 1 CapBank_Undervoltage",
     "Module 2 CapBank_Undervoltage",
-    "Arm 1 Overcurrent",
-    "Arm 2 Overcurrent",
-    "Arms High_Difference",
-    "ACDC Interlock",
+    "Module 1 Output Overvoltage",
+    "Module 2 Output Overvoltage",
+    "Module 1 Output Undervoltage",
+    "Module 2 Output Undervoltage",
+    "IIB 1 Itlk",
+    "IIB 2 Itlk",
+    "IDB Master Itlk",
+    "IDB Slave Itlk",
+    "External Interlock",
 ]
+
+list_2p_dcdc_imas_iib_interlocks = list_dcdc_iib_interlocks
+list_2p_dcdc_imas_iib_alarms = list_dcdc_iib_alarms
 
 bsmp_acdc = {
     "v_capacitor_bank": {"addr": 33, "format": "f", "size": 4, "egu": "V"},
@@ -451,19 +473,71 @@ bsmp_2p_acdc_imas = {
     "v_capacitor_bank": {"addr": 33, "format": "f", "size": 4, "egu": "V"},
     "i_out_rectifier": {"addr": 34, "format": "f", "size": 4, "egu": "A"},
     "duty_cycle": {"addr": 35, "format": "f", "size": 4, "egu": "p.u."},
+    "i_input_is_iib": {"addr": 36, "format": "f", "size": 4, "egu": "A"},
+    "v_input_is_iib": {"addr": 37, "format": "f", "size": 4, "egu": "V"},
+    "temp_igbt_is_iib": {"addr": 38, "format": "f", "size": 4, "egu": "°C"},
+    "v_driver_is_iib": {"addr": 39, "format": "f", "size": 4, "egu": "V"},
+    "i_driver_is_iib": {"addr": 40, "format": "f", "size": 4, "egu": "A"},
+    "temp_inductor_is_iib": {"addr": 41, "format": "f", "size": 4, "egu": "°C"},
+    "temp_heatsink_is_iib": {"addr": 42, "format": "f", "size": 4, "egu": "°C"},
+    "temp_board_is_iib": {"addr": 43, "format": "f", "size": 4, "egu": "°C"},
+    "rh_is_iib": {"addr": 44, "format": "f", "size": 4, "egu": "%"},
+    "iib_interlocks_is": {"addr": 45, "format": "I", "size": 4, "egu": ""},
+    "iib_alarms_is": {"addr": 46, "format": "I", "size": 4, "egu": ""},
+    "v_output_cmd_iib": {"addr": 47, "format": "f", "size": 4, "egu": "V"},
+    "v_capbank_cmd_iib": {"addr": 48, "format": "f", "size": 4, "egu": "V"},
+    "temp_rect_inductor_cmd_iib": {"addr": 49, "format": "f", "size": 4, "egu": "°C"},
+    "temp_rect_heatsink_cmd_iib": {"addr": 50, "format": "f", "size": 4, "egu": "°C"},
+    "v_ext_boards_cmd_iib": {"addr": 51, "format": "f", "size": 4, "egu": "V"},
+    "i_aux_board_cmd_iib": {"addr": 52, "format": "f", "size": 4, "egu": "A"},
+    "i_idb_board_cmd_iib": {"addr": 53, "format": "f", "size": 4, "egu": "A"},
+    "i_leakage_cmd_iib": {"addr": 54, "format": "f", "size": 4, "egu": "A"},
+    "temp_board_cmd_iib": {"addr": 55, "format": "f", "size": 4, "egu": "°C"},
+    "rh_cmd_iib": {"addr": 56, "format": "f", "size": 4, "egu": "%"},
+    "iib_interlocks_cmd": {"addr": 57, "format": "I", "size": 4, "egu": ""},
+    "iib_alarms_cmd": {"addr": 58, "format": "I", "size": 4, "egu": ""},
 }
 
 bsmp_2p_dcdc_imas = {
-    "i_load": {"addr": 33, "format": "f", "size": 4, "egu": "A"},
-    "i_load_error": {"addr": 34, "format": "f", "size": 4, "egu": "A"},
+    "i_load_mean": {"addr": 33, "format": "f", "size": 4, "egu": "A"},
+    "i_load": {"addr": 34, "format": "f", "size": 4, "egu": "A"},
     "i_arm_1": {"addr": 35, "format": "f", "size": 4, "egu": "A"},
     "i_arm_2": {"addr": 36, "format": "f", "size": 4, "egu": "A"},
-    "i_arms_diff": {"addr": 37, "format": "f", "size": 4, "egu": "A"},
-    "v_capbank_1": {"addr": 38, "format": "f", "size": 4, "egu": "V"},
-    "v_capbank_2": {"addr": 39, "format": "f", "size": 4, "egu": "V"},
-    "duty_cycle_1": {"addr": 40, "format": "f", "size": 4, "egu": "p.u."},
-    "duty_cycle_2": {"addr": 41, "format": "f", "size": 4, "egu": "p.u."},
-    "duty_diff": {"addr": 42, "format": "f", "size": 4, "egu": "p.u."},
+    "v_capbank_1": {"addr": 37, "format": "f", "size": 4, "egu": "V"},
+    "v_capbank_2": {"addr": 38, "format": "f", "size": 4, "egu": "V"},
+    "v_out_os_1": {"addr": 39, "format": "f", "size": 4, "egu": "V"},
+    "v_out_os_2": {"addr": 40, "format": "f", "size": 4, "egu": "V"},
+    "duty_cycle_1": {"addr": 41, "format": "f", "size": 4, "egu": "p.u."},
+    "duty_cycle_2": {"addr": 42, "format": "f", "size": 4, "egu": "p.u."},
+    "v_input_iib_1": {"addr": 43, "format": "f", "size": 4, "egu": "V"},
+    "i_input_iib_1": {"addr": 44, "format": "f", "size": 4, "egu": "A"},
+    "i_output_iib_1": {"addr": 45, "format": "f", "size": 4, "egu": "A"},
+    "temp_igbts_1_iib_1": {"addr": 46, "format": "f", "size": 4, "egu": "°C"},
+    "temp_igbts_2_iib_1": {"addr": 47, "format": "f", "size": 4, "egu": "°C"},
+    "temp_inductor_iib_1": {"addr": 48, "format": "f", "size": 4, "egu": "°C"},
+    "temp_heatsink_iib_1": {"addr": 49, "format": "f", "size": 4, "egu": "°C"},
+    "v_driver_iib_1": {"addr": 50, "format": "f", "size": 4, "egu": "V"},
+    "i_driver_1_iib_1": {"addr": 51, "format": "f", "size": 4, "egu": "A"},
+    "i_driver_2_iib_1": {"addr": 52, "format": "f", "size": 4, "egu": "A"},
+    "temp_board_iib_1": {"addr": 53, "format": "f", "size": 4, "egu": "°C"},
+    "rh_iib_1": {"addr": 54, "format": "f", "size": 4, "egu": "%"},
+    "iib_interlocks_1": {"addr": 55, "format": "I", "size": 4, "egu": ""},
+    "iib_alarms_1": {"addr": 56, "format": "I", "size": 4, "egu": ""},
+    "v_input_iib_2": {"addr": 57, "format": "f", "size": 4, "egu": "V"},
+    "i_input_iib_2": {"addr": 58, "format": "f", "size": 4, "egu": "A"},
+    "i_output_iib_2": {"addr": 59, "format": "f", "size": 4, "egu": "A"},
+    "temp_igbts_1_iib_2": {"addr": 60, "format": "f", "size": 4, "egu": "°C"},
+    "temp_igbts_2_iib_2": {"addr": 61, "format": "f", "size": 4, "egu": "°C"},
+    "temp_inductor_iib_2": {"addr": 62, "format": "f", "size": 4, "egu": "°C"},
+    "temp_heatsink_iib_2": {"addr": 63, "format": "f", "size": 4, "egu": "°C"},
+    "v_driver_iib_2": {"addr": 64, "format": "f", "size": 4, "egu": "V"},
+    "i_driver_1_iib_2": {"addr": 65, "format": "f", "size": 4, "egu": "A"},
+    "i_driver_2_iib_2": {"addr": 66, "format": "f", "size": 4, "egu": "A"},
+    "temp_board_iib_2": {"addr": 67, "format": "f", "size": 4, "egu": "°C"},
+    "rh_iib_2": {"addr": 68, "format": "f", "size": 4, "egu": "%"},
+    "iib_interlocks_2": {"addr": 69, "format": "I", "size": 4, "egu": ""},
+    "iib_alarms_2": {"addr": 70, "format": "I", "size": 4, "egu": ""},
+    "ps_alarms": {"addr": 71, "format": "I", "size": 4, "egu": ""},
 }
 
 bsmp_2p4s_acdc = {
